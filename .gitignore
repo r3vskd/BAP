@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Solana
+target/
+test-ledger/
+.anchor/
+deployments/
+
+# BAP
+.bap.json

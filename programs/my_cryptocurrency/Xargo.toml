@@ -1,8 +1,0 @@
-[package]
-name = "my_cryptocurrency"
-version = "0.1.0"
-description = "My Solana Cryptocurrency"
-edition = "2021"
-
-[dependencies]
-anchor-lang = "0.30.1"
