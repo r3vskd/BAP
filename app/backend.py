@@ -45,7 +45,7 @@ class MintInfo:
     mint_authority: Optional[str]
     freeze_authority: Optional[str]
 
-async def connect(cluster: str = "devnet") -> AsyncClient:
+async def connect(cluster: str = "devnet") -> AsyncClient: # Conecta a la red de Solana.
     urls = RPC_URLS if cluster == "devnet" else [
         "https://api.mainnet-beta.solana.com",
     ]
@@ -59,7 +59,7 @@ async def connect(cluster: str = "devnet") -> AsyncClient:
             continue
     raise ConnectionError(f"Could not connect to any {cluster} RPC endpoint")
 
-async def create_mint(
+async def create_mint( # Crea la mint de BAP.
     client: AsyncClient,
     wallet,
     decimals: int = TOKEN_DECIMALS,
@@ -101,7 +101,7 @@ async def create_mint(
     save_mint_address(str(mint_pubkey))
     return mint_pubkey
 
-async def create_token_account(
+async def create_token_account( # Crea la cuenta de token de BAP.
     client: AsyncClient,
     wallet,
     mint: Pubkey,
@@ -126,7 +126,7 @@ async def create_token_account(
 
     return ata
 
-async def mint_tokens(
+async def mint_tokens( # Muestra tokens de BAP.
     client: AsyncClient,
     wallet,
     mint: Pubkey,
@@ -160,7 +160,7 @@ async def mint_tokens(
 
     return dest
 
-async def transfer_tokens(
+async def transfer_tokens( # Transfiere tokens de BAP.
     client: AsyncClient,
     wallet,
     mint: Pubkey,
@@ -208,7 +208,7 @@ async def transfer_tokens(
 
     return dest
 
-async def burn_tokens(
+async def burn_tokens( # Destruye tokens de BAP.
     client: AsyncClient,
     wallet,
     mint: Pubkey,
@@ -237,7 +237,7 @@ async def burn_tokens(
     )
     await client.confirm_transaction(result.value, commitment=Confirmed)
 
-async def get_balance(
+async def get_balance( # Obtiene el saldo de tokens de BAP.
     client: AsyncClient,
     mint: Pubkey,
     address: Optional[Pubkey] = None,
@@ -252,11 +252,11 @@ async def get_balance(
     except Exception:
         return 0.0
 
-async def get_supply(client: AsyncClient, mint: Pubkey) -> float:
+async def get_supply(client: AsyncClient, mint: Pubkey) -> float: # Obtiene la cantidad total de tokens de BAP.
     info = await get_mint_info(client, mint)
     return info.supply
 
-async def get_mint_info(client: AsyncClient, mint: Pubkey) -> MintInfo:
+async def get_mint_info(client: AsyncClient, mint: Pubkey) -> MintInfo: # Obtiene la informacion de la mint de BAP.
     resp = await client.get_account_info(mint, commitment=Confirmed)
     data = resp.value.data
 
@@ -287,7 +287,7 @@ def _encode_string(s: str) -> bytes:
     encoded = s.encode("utf-8")
     return struct.pack("<I", len(encoded)) + encoded
 
-def _build_create_metadata_ix(
+def _build_create_metadata_ix( # Construye la instruccion para crear la metadata de la mint de BAP.
     mint: Pubkey,
     authority: Pubkey,
     payer: Pubkey,
@@ -339,7 +339,7 @@ def _build_create_metadata_ix(
 
     return Instruction(metaplex, bytes(data), accounts)
 
-async def set_metadata(
+async def set_metadata( # Establece la metadata de la mint de BAP.
     client: AsyncClient,
     wallet,
     mint: Pubkey,
@@ -366,7 +366,7 @@ async def set_metadata(
     )
     await client.confirm_transaction(result.value, commitment=Confirmed)
 
-async def revoke_freeze_authority(client: AsyncClient, wallet, mint: Pubkey) -> None:
+async def revoke_freeze_authority(client: AsyncClient, wallet, mint: Pubkey) -> None: # Revoca la autoridad de congelamiento de la mint de BAP.
     ix = set_authority(
         SetAuthorityParams(
             account_or_mint=mint,
@@ -387,7 +387,7 @@ async def revoke_freeze_authority(client: AsyncClient, wallet, mint: Pubkey) -> 
     )
     await client.confirm_transaction(result.value, commitment=Confirmed)
 
-async def revoke_mint_authority(client: AsyncClient, wallet, mint: Pubkey) -> None:
+async def revoke_mint_authority(client: AsyncClient, wallet, mint: Pubkey) -> None: # Revoca la autoridad de la mint de BAP.
     ix = set_authority(
         SetAuthorityParams(
             account_or_mint=mint,
@@ -408,7 +408,7 @@ async def revoke_mint_authority(client: AsyncClient, wallet, mint: Pubkey) -> No
     )
     await client.confirm_transaction(result.value, commitment=Confirmed)
 
-async def make_metadata_immutable(
+async def make_metadata_immutable( # Hace la metadata de la mint de BAP inmutable.
     client: AsyncClient,
     wallet,
     mint: Pubkey,

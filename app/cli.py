@@ -6,14 +6,14 @@ from solders.pubkey import Pubkey
 from app import backend
 from app.config import get_mint_address, load_keypair
 
-def get_mint(mint_override: Optional[str]) -> Pubkey:
+def get_mint(mint_override: Optional[str]) -> Pubkey: # Obtiene la mint de BAP.
     addr = mint_override or get_mint_address()
     if addr is None:
         print("Error: No mint address found. Run 'init' first or pass --mint <address>")
         sys.exit(1)
     return Pubkey.from_string(addr)
 
-async def cmd_init(args):
+async def cmd_init(args): # Crea la mint de BAP.
     wallet = load_keypair(args.wallet)
     client = await backend.connect(args.cluster)
     try:
@@ -24,7 +24,7 @@ async def cmd_init(args):
     finally:
         await client.close()
 
-async def cmd_metadata(args):
+async def cmd_metadata(args): # Establece la metadata de la mint de BAP.
     wallet = load_keypair(args.wallet)
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
@@ -35,7 +35,7 @@ async def cmd_metadata(args):
     finally:
         await client.close()
 
-async def cmd_mint(args):
+async def cmd_mint(args): # Muestra tokens de BAP.
     wallet = load_keypair(args.wallet)
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
@@ -47,7 +47,7 @@ async def cmd_mint(args):
     finally:
         await client.close()
 
-async def cmd_transfer(args):
+async def cmd_transfer(args): # Transfiere tokens de BAP.
     wallet = load_keypair(args.wallet)
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
@@ -59,7 +59,7 @@ async def cmd_transfer(args):
     finally:
         await client.close()
 
-async def cmd_burn(args):
+async def cmd_burn(args): # Destruye tokens de BAP.
     wallet = load_keypair(args.wallet)
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
@@ -70,7 +70,7 @@ async def cmd_burn(args):
     finally:
         await client.close()
 
-async def cmd_balance(args):
+async def cmd_balance(args): # Obtiene el saldo de tokens de BAP.
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
     address = Pubkey.from_string(args.address) if args.address else None
@@ -83,7 +83,7 @@ async def cmd_balance(args):
     finally:
         await client.close()
 
-async def cmd_supply(args):
+async def cmd_supply(args): # Obtiene la cantidad total de tokens de BAP.
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
     try:
@@ -92,7 +92,7 @@ async def cmd_supply(args):
     finally:
         await client.close()
 
-async def cmd_info(args):
+async def cmd_info(args): # Obtiene la informacion de la mint de BAP.
     client = await backend.connect(args.cluster)
     mint = get_mint(args.mint)
     try:
@@ -105,7 +105,7 @@ async def cmd_info(args):
     finally:
         await client.close()
 
-async def cmd_revoke_freeze(args):
+async def cmd_revoke_freeze(args): # Revoca la autoridad de congelamiento de la mint de BAP.
     if not args.yes:
         print("WARNING: This action is PERMANENT and IRREVERSIBLE.")
         print("After revoking freeze authority, no one can freeze BAP token accounts.")
@@ -124,7 +124,7 @@ async def cmd_revoke_freeze(args):
     finally:
         await client.close()
 
-async def cmd_revoke_mint(args):
+async def cmd_revoke_mint(args): # Revoca la autoridad de la mint de BAP.
     if not args.yes:
         print("WARNING: This action is PERMANENT and IRREVERSIBLE.")
         print("After revoking mint authority, no more BAP tokens can ever be created.")
@@ -144,7 +144,7 @@ async def cmd_revoke_mint(args):
     finally:
         await client.close()
 
-async def cmd_make_immutable(args):
+async def cmd_make_immutable(args): # metadata de la mint de BAP inmutable.
     if not args.yes:
         print("WARNING: This action is PERMANENT and IRREVERSIBLE.")
         print("After making metadata immutable, the token name, symbol, and logo can never be changed.")
